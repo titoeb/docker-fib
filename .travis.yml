@@ -7,10 +7,10 @@ script:
     - docker run titoeb/react-test npm test -- --coverage
 after_sucess:
     # Build all images that are relevant for production.
-    - docker build -t titoeb/fib-client -f ./client
-    - docker build -t titoeb/fib-server -f ./server
-    - docker build -t titoeb/fib-nginx -f ./nginx
-    - docker build -t titoeb/fib-worker -f ./worker
+    - docker build -t titoeb/fib-client ./client
+    - docker build -t titoeb/fib-server ./server
+    - docker build -t titoeb/fib-nginx ./nginx
+    - docker build -t titoeb/fib-worker ./worker
     # Log-in to docker cli.
     - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_ID}" --password-stdin
     # Push the images to Dockerhub.
@@ -18,4 +18,3 @@ after_sucess:
     - docker push titoeb/fib-server 
     - docker push titoeb/fib-nginx 
     - docker push titoeb/fib-worker
-    
