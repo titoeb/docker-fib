@@ -1,0 +1,20 @@
+sudo: required
+services:
+    - docker
+before_install:
+    - docker build -t titoeb/react-test -f ./client/Dockerfile.dev ./client
+script:
+    - docker run titoeb/react-test npm test -- --coverage
+after_sucess:
+    # Build all images that are relevant for production.
+    - docker built -t titoeb/fib-client -f ./client
+    - docker built -t titoeb/fib-server -f ./server
+    - docker built -t titoeb/fib-nginx -f ./nginx
+    - docker built -t titoeb/fib-worker -f ./worker
+    # Log-in to docker cli.
+    - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_ID}" --password-stdin
+    # Push the images to Dockerhub.
+    - docker push titoeb/fib-client 
+    - docker push titoeb/fib-server 
+    - docker push titoeb/fib-nginx 
+    - docker push titoeb/fib-worker
