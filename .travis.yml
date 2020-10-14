@@ -1,10 +1,11 @@
 sudo: required
+language: generic
 services:
     - docker
 before_install:
     - docker build -t titoeb/react-test -f ./client/Dockerfile.dev ./client
 script:
-    - docker run titoeb/react-test npm test -- --coverage
+    - docker run -e CI=true USERNAME/react-test npm test
 after_sucess:
     # Build all images that are relevant for production.
     - docker build -t titoeb/fib-client ./client
